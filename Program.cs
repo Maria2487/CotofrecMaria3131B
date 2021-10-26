@@ -12,27 +12,22 @@ namespace CotofrecMaria3131B
 {
     class SimpleWindow3D : GameWindow
     {
+        private const int XYZ_SIZE = 75;
+        private const int ColorMax = 255;
+        private const int ColorMin = 0;
+        private const String FileName = @"E:\An3\CotofrecMaria3131B\triangle.txt";
         const float rotation_speed = 180.0f;
         float angle;
         bool showCube = true;
         KeyboardState lastKeyPress;
         bool moveRight, moveLeft, goUp, goDown;
 
-        //private float mouseXLast;
-        //private float mouseYLast;
-        //private float mouseSLast;
-        //private Vector2 lastMousePos;
-
         public SimpleWindow3D() : base(800, 600)
         {
             VSync = VSyncMode.On;
             KeyDown += Keyboard_KeyDown;
         }
-        //void ResetCursor()
-        //{
-        //    OpenTK.Input.Mouse.SetPosition(Bounds.Left + Bounds.Width / 2, Bounds.Top + Bounds.Height / 2);
-        //    lastMousePos = new Vector2(OpenTK.Input.Mouse.GetState().X, OpenTK.Input.Mouse.GetState().Y);
-        //}
+
 
         void Keyboard_KeyDown(object sender, KeyboardKeyEventArgs e)
         {
@@ -98,33 +93,14 @@ namespace CotofrecMaria3131B
             }
             if (keyboard[OpenTK.Input.Key.Left])
             {
-                //if (moveLeft)
-                //    moveLeft = false;
-                //else
                     moveLeft = true;
             }
             if (keyboard[OpenTK.Input.Key.Right])
             {
-                //if (moveRight)
-                //    moveRight = false;
-                //else
                     moveRight = true;
             }
             lastKeyPress = keyboard;
 
-
-            //if (mouse[OpenTK.Input.MouseButton.Left])
-            //{
-            //    // Ascundere comandată, prin clic de mouse - fără testare remanență.
-            //    if (showCube == true)
-            //    {
-            //        showCube = false;
-            //    }
-            //    else
-            //    {
-            //        showCube = true;
-            //    }
-            //}
         }
         protected override void OnRenderFrame(FrameEventArgs e)
         {
@@ -132,12 +108,16 @@ namespace CotofrecMaria3131B
 
             GL.Clear(ClearBufferMask.ColorBufferBit | ClearBufferMask.DepthBufferBit);
 
-            Matrix4 lookat = Matrix4.LookAt(0, 1, 10, 0, 0, 0, 0, 1, 0);
+            Matrix4 lookat = Matrix4.LookAt(6, 6, 10, 0, 0, 0, 0, 1, 0);
             GL.MatrixMode(MatrixMode.Modelview);
             GL.LoadMatrix(ref lookat);
 
+            DrawAxes();
 
-            //GL.Rotate(angle, 0.0f, 1.0f, 0.0f);
+
+            MyTriangle trg1 = MyTriangle.ReadCoordonates(FileName);
+            trg1.DrawMe();
+
 
             if (moveRight)
             {
@@ -203,13 +183,32 @@ namespace CotofrecMaria3131B
 
             GL.End();
         }
-        /// /////////////////////////////
-        //public void TrackMouse()
-        //{
-        //    this.mouseXLast = OpenTK.Input.Mouse.GetState().X;
-        //    this.mouseYLast = OpenTK.Input.Mouse.GetState().Y;
-        //    this.mouseSLast = OpenTK.Input.Mouse.GetState().WheelPrecise;
-        //}
+        private void DrawAxes()
+        {
+
+            //GL.LineWidth(3.0f);
+
+            // Desenează axa Ox (cu roșu).
+            GL.Begin(PrimitiveType.Lines);
+            GL.Color3(Color.Red);
+            GL.Vertex3(0, 0, 0);
+            GL.Vertex3(XYZ_SIZE, 0, 0);
+            GL.End();
+
+            // Desenează axa Oy (cu galben).
+            GL.Begin(PrimitiveType.Lines);
+            GL.Color3(Color.Yellow);
+            GL.Vertex3(0, 0, 0);
+            GL.Vertex3(0, XYZ_SIZE, 0); ;
+            GL.End();
+
+            // Desenează axa Oz (cu verde).
+            GL.Begin(PrimitiveType.Lines);
+            GL.Color3(Color.Green);
+            GL.Vertex3(0, 0, 0);
+            GL.Vertex3(0, 0, XYZ_SIZE);
+            GL.End();
+        }
 
         static void Main(string[] args)
         {

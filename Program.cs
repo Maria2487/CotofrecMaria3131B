@@ -1,35 +1,40 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Drawing;
-using OpenTK;
+﻿using OpenTK;
 using OpenTK.Graphics.OpenGL;
 using OpenTK.Input;
+using System;
+using System.Drawing;
 
 namespace CotofrecMaria3131B
 {
-    class SimpleWindow3D : GameWindow
+    internal class SimpleWindow3D : GameWindow
     {
         private const int XYZ_SIZE = 75;
-        private const int ColorMax = 255;
-        private const int ColorMin = 0;
+        private const int colorMax = 255;
+        private const int colorMin = 0;
+        private int redC = 0, greenC = 0, blueC = 0;
         private const String FileName = @"E:\An3\CotofrecMaria3131B\triangle.txt";
-        const float rotation_speed = 180.0f;
-        float angle;
-        bool showCube = true;
-        KeyboardState lastKeyPress;
-        bool moveRight, moveLeft, goUp, goDown;
+        private const float rotation_speed = 180.0f;
+        private float angle;
+        private bool showCube = true;
+        private KeyboardState lastKeyPress;
+        private bool moveObjectRight, moveObjectLeft, moveMouseRight, moveMouseLeft;
+        private int[] SeePort = new int[3];
 
         public SimpleWindow3D() : base(800, 600)
         {
             VSync = VSyncMode.On;
             KeyDown += Keyboard_KeyDown;
+            SeePort[0] = SeePort[1] = SeePort[2] = 10;
         }
 
+        public bool CheckIfInRangeColor(int color)
+        {
+            if (color >= colorMin && color < colorMax)
+                return true;
+            return false;
+        }
 
-        void Keyboard_KeyDown(object sender, KeyboardKeyEventArgs e)
+        private void Keyboard_KeyDown(object sender, KeyboardKeyEventArgs e)
         {
             if (e.Key == Key.Escape)
                 this.Exit();
@@ -40,6 +45,7 @@ namespace CotofrecMaria3131B
                 else
                     this.WindowState = WindowState.Fullscreen;
         }
+
         protected override void OnLoad(EventArgs e)
         {
             base.OnLoad(e);
@@ -47,6 +53,7 @@ namespace CotofrecMaria3131B
             GL.ClearColor(Color.PaleTurquoise);
             //GL.Enable(EnableCap.DepthTest);
         }
+
         protected override void OnResize(EventArgs e)
         {
             base.OnResize(e);
@@ -59,19 +66,81 @@ namespace CotofrecMaria3131B
             GL.MatrixMode(MatrixMode.Projection);
             GL.LoadMatrix(ref perspective);
         }
+
         protected override void OnUpdateFrame(FrameEventArgs e)
         {
-
             GL.Clear(ClearBufferMask.ColorBufferBit);
 
             base.OnUpdateFrame(e);
 
             KeyboardState keyboard = OpenTK.Input.Keyboard.GetState();
             MouseState mouse = OpenTK.Input.Mouse.GetState();
-            moveRight = false;
-            moveLeft = false;
-            goUp = false;
-            goDown = false;
+            moveObjectRight = false;
+            moveObjectLeft = false;
+
+            #region Modificare culoar RGB Laborator 3
+
+            if (keyboard[OpenTK.Input.Key.G])
+            {
+                if (keyboard[OpenTK.Input.Key.Up])
+                {
+                    if (CheckIfInRangeColor(greenC))
+                    {
+                        greenC++;
+                        Console.WriteLine("R: " + redC + " G: " + greenC + " B: " + blueC);
+                    }
+                }
+                else if (keyboard[OpenTK.Input.Key.Down])
+                {
+                    if (CheckIfInRangeColor(greenC - 1))
+                    {
+                        greenC--;
+                        Console.WriteLine("R: " + redC + " G: " + greenC + " B: " + blueC);
+                    }
+                }
+            }
+
+            if (keyboard[OpenTK.Input.Key.R])
+            {
+                if (keyboard[OpenTK.Input.Key.Up])
+                {
+                    if (CheckIfInRangeColor(redC))
+                    {
+                        redC++;
+                        Console.WriteLine("R: " + redC + " G: " + greenC + " B: " + blueC);
+                    }
+                }
+                else if (keyboard[OpenTK.Input.Key.Down])
+                {
+                    if (CheckIfInRangeColor(redC - 1))
+                    {
+                        redC--;
+                        Console.WriteLine("R: " + redC + " G: " + greenC + " B: " + blueC);
+                    }
+                }
+            }
+
+            if (keyboard[OpenTK.Input.Key.B])
+            {
+                if (keyboard[OpenTK.Input.Key.Up])
+                {
+                    if (CheckIfInRangeColor(blueC))
+                    {
+                        blueC++;
+                        Console.WriteLine("R: " + redC + " G: " + greenC + " B: " + blueC);
+                    }
+                }
+                else if (keyboard[OpenTK.Input.Key.Down])
+                {
+                    if (CheckIfInRangeColor(blueC - 1))
+                    {
+                        blueC--;
+                        Console.WriteLine("R: " + redC + " G: " + greenC + " B: " + blueC);
+                    }
+                }
+            }
+
+            #endregion Modificare culoar RGB Laborator 3
 
             // Se utilizeaza mecanismul de control input oferit de OpenTK (include perifcerice multiple, mai ales pentru gaming - gamepads, joysticks, etc.).
             if (keyboard[OpenTK.Input.Key.Escape])
@@ -91,56 +160,92 @@ namespace CotofrecMaria3131B
                     showCube = true;
                 }
             }
+
+            #region Rotire obiect (taste) Laborator 2
+
             if (keyboard[OpenTK.Input.Key.Left])
             {
-                    moveLeft = true;
+                moveObjectLeft = true;
             }
             if (keyboard[OpenTK.Input.Key.Right])
             {
-                    moveRight = true;
+                moveObjectRight = true;
             }
             lastKeyPress = keyboard;
 
+            #endregion Rotire obiect (taste) Laborator 2
+
+            #region Schimbare unghi camera (mouse) Laborator 3
+
+            if (mouse.X < -50)
+            {
+                moveMouseLeft = true;
+                if (SeePort[0] > -10)
+                    SeePort[0]--;
+            }
+            else if (mouse.X > 100)
+            {
+                moveMouseRight = true;
+                if (SeePort[0] < 20)
+                    SeePort[0]++;
+            }
+            if (mouse.Y < -50)
+            {
+                moveMouseLeft = true;
+                if (SeePort[1] > -10)
+                    SeePort[1]--;
+            }
+            else if (mouse.Y > 100)
+            {
+                moveMouseRight = true;
+                if (SeePort[1] < 20)
+                    SeePort[1]++;
+            }
+
+            #endregion Schimbare unghi camera (mouse) Laborator 3
         }
+
         protected override void OnRenderFrame(FrameEventArgs e)
         {
             base.OnRenderFrame(e);
 
             GL.Clear(ClearBufferMask.ColorBufferBit | ClearBufferMask.DepthBufferBit);
 
-            Matrix4 lookat = Matrix4.LookAt(6, 6, 10, 0, 0, 0, 0, 1, 0);
+            //Matrix4 lookat = Matrix4.LookAt(6, 6, 10, 0, 0, 0, 0, 1, 0);
+            Matrix4 lookat = Matrix4.LookAt(SeePort[0], SeePort[1], SeePort[2], 0, 0, 0, 0, 1, 0);
             GL.MatrixMode(MatrixMode.Modelview);
             GL.LoadMatrix(ref lookat);
 
             DrawAxes();
 
+            MyTriangle trg1 = MyTriangle.ReadCoordonates(FileName); //////////// Triunghi
+            trg1.DrawMe(redC, greenC, blueC);
 
-            MyTriangle trg1 = MyTriangle.ReadCoordonates(FileName);
-            trg1.DrawMe();
+            #region Rotire obiect Laborator 2
 
-
-            if (moveRight)
+            if (moveObjectRight)
             {
                 angle += rotation_speed * (float)e.Time;
                 GL.Rotate(angle, 0.0f, 1.0f, 0.0f);
             }
-            if (moveLeft)
+            if (moveObjectLeft)
             {
                 angle += rotation_speed * (float)e.Time;
                 GL.Rotate(angle, 0.0f, -1.0f, 0.0f);
             }
 
-            // Exportăm controlul randării obiectelor către o metodă externă (modularizare).
+            #endregion Rotire obiect Laborator 2
+
             if (showCube == true)
             {
-                DrawCube();   
+                DrawCube();
             }
 
             SwapBuffers();
             //Thread.Sleep(1);
         }
 
-        private void DrawCube()
+        private void DrawCube()////////////////////// Cub
         {
             GL.Begin(PrimitiveType.Quads);
 
@@ -183,9 +288,9 @@ namespace CotofrecMaria3131B
 
             GL.End();
         }
-        private void DrawAxes()
-        {
 
+        private void DrawAxes()///////////////////// Axe de coordonate
+        {
             //GL.LineWidth(3.0f);
 
             // Desenează axa Ox (cu roșu).
@@ -210,7 +315,7 @@ namespace CotofrecMaria3131B
             GL.End();
         }
 
-        static void Main(string[] args)
+        private static void Main(string[] args)
         {
             using (SimpleWindow3D example = new SimpleWindow3D())
             {

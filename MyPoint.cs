@@ -1,25 +1,20 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Drawing;
-using OpenTK;
-using OpenTK.Graphics.OpenGL;
-using OpenTK.Input;
+﻿using System.Drawing;
+
 namespace CotofrecMaria3131B
 {
-    class MyPoint
+    internal class MyPoint
     {
         private int X;
         private int Y;
         private int Z;
         private Color pointColor = Color.Black;
 
+        #region Constructori
+
         public MyPoint()
         {
-
         }
+
         public MyPoint(int x, int y, int z)
         {
             X = x;
@@ -34,6 +29,10 @@ namespace CotofrecMaria3131B
             Z = z;
             pointColor = color;
         }
+
+        #endregion Constructori
+
+        #region Setter
 
         public void setColor(Color color)
         {
@@ -55,6 +54,10 @@ namespace CotofrecMaria3131B
             Z = z;
         }
 
+        #endregion Setter
+
+        #region Getter
+
         public Color getColor()
         {
             return pointColor;
@@ -74,5 +77,7 @@ namespace CotofrecMaria3131B
         {
             return Z;
         }
+
+        #endregion Getter
     }
 }

@@ -1,17 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using OpenTK.Graphics.OpenGL;
 using System.Drawing;
-using OpenTK;
-using OpenTK.Graphics.OpenGL;
-using OpenTK.Input;
 using System.IO;
 
 namespace CotofrecMaria3131B
 {
-    class MyTriangle : MyPoint
+    internal class MyTriangle : MyPoint
     {
         private MyPoint A, B, C;
         public bool IsDrawable { get; set; }
@@ -41,7 +34,7 @@ namespace CotofrecMaria3131B
         public void ManualTriangle()
         {
             IsDrawable = true;
-            // coordonate hardcoded - se poate înlocui cu încărcare din fișier text specificat;
+
             A = new MyPoint(5, 2, 0, Color.DeepPink);
             B = new MyPoint(8, 8, 0, Color.DeepPink);
             C = new MyPoint(1, 1, 0, Color.DeepPink);
@@ -49,17 +42,16 @@ namespace CotofrecMaria3131B
 
         public MyTriangle()
         {
-
         }
+
         public MyTriangle(MyPoint a, MyPoint b, MyPoint c)
         {
             IsDrawable = true;
-            // coordonate hardcoded - se poate înlocui cu încărcare din fișier text specificat;
+
             A = new MyPoint(a.getX(), a.getY(), a.getZ(), a.getColor());
             B = new MyPoint(b.getX(), b.getY(), b.getZ(), b.getColor());
             C = new MyPoint(c.getX(), c.getY(), c.getZ(), c.getColor());
         }
-
 
         public void DrawMe()
         {
@@ -80,11 +72,25 @@ namespace CotofrecMaria3131B
             GL.End();
         }
 
+        public void DrawMe(int red, int green, int blue)
+        {
+            GL.Begin(PrimitiveType.Triangles);
+
+            GL.Color3(Color.FromArgb(red, 0, 0));
+            GL.Vertex3(A.getX(), A.getY(), A.getZ());
+            GL.Color3(Color.FromArgb(0, green, 0));
+            GL.Vertex3(B.getX(), B.getY(), B.getZ());
+            GL.Color3(Color.FromArgb(0, 0, blue));
+            GL.Vertex3(C.getX(), C.getY(), C.getZ());
+
+            GL.End();
+        }
+
         public static MyTriangle ReadCoordonates(string FileName)
         {
             string[] lines = File.ReadAllLines(FileName);
             string[] result;
-            int[] numere = new int[3];
+            int[] numbers = new int[3];
             MyPoint[] vertex = new MyPoint[3];
 
             int j = 0;
@@ -94,10 +100,10 @@ namespace CotofrecMaria3131B
                 result = line.Split(' ');
                 foreach (string ch in result)
                 {
-                    numere[i] = int.Parse(ch);
+                    numbers[i] = int.Parse(ch);
                     i++;
                 }
-                vertex[j] = new MyPoint(numere[0], numere[1], numere[2]);
+                vertex[j] = new MyPoint(numbers[0], numbers[1], numbers[2]);
                 j++;
             }
             MyTriangle T = new MyTriangle(vertex[0], vertex[1], vertex[2]);

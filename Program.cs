@@ -28,6 +28,7 @@ namespace CotofrecMaria3131B
         private int Increment = 5;
 
         private Color[] colorsCube;
+        Randomizer randomColor;
 
         ///private readonly Color DEFAULT_BKG_COLOR = Color.FromArgb(49, 50, 51);
 
@@ -39,6 +40,13 @@ namespace CotofrecMaria3131B
             VSync = VSyncMode.On;
             KeyDown += Keyboard_KeyDown;
             SeePort[0] = SeePort[1] = SeePort[2] = 10;
+
+            randomColor = new Randomizer();
+            colorsCube = new Color[6];
+            for (int i = 0; i < 6; i++)
+            {
+                colorsCube[i] = randomColor.RandomColor();
+            }
         }
 
         private void MyHelp()

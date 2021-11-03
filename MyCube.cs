@@ -72,10 +72,11 @@ namespace CotofrecMaria3131B
             int j = 0;
             if (axisVisibility)
             {
+                GL.Begin(PrimitiveType.Quads);
                 for (int i = 0; i < 6; i++)
                 {
                     GL.Color3(color[i]);
-                    GL.Begin(PrimitiveType.Quads);
+                    
                     GL.Vertex3(cube[j].getX(), cube[j].getY(), cube[j++].getZ());
                     GL.Vertex3(cube[j].getX(), cube[j].getY(), cube[j++].getZ());
                     GL.Vertex3(cube[j].getX(), cube[j].getY(), cube[j++].getZ());
@@ -121,8 +122,7 @@ namespace CotofrecMaria3131B
                 foreach (string line in lines)
                 {
                     infoCord = line.Split(' ');
-                    //vectorList[i] = new MyPoint((int)Convert.ToDouble(infoCord[0]), (int)Convert.ToDouble(infoCord[1]), (int)Convert.ToDouble(infoCord[2]));
-                    //int ceva = Convert.ToInt32(infoCord[0]);
+                    vectorList[i] = new MyPoint((int)Convert.ToDouble(infoCord[0]), (int)Convert.ToDouble(infoCord[1]), (int)Convert.ToDouble(infoCord[2]));
                     i++;
                 }
 

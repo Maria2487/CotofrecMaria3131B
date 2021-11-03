@@ -4,36 +4,31 @@ using System.IO;
 
 namespace CotofrecMaria3131B
 {
-    internal class MyTriangle : MyPoint
+    class MyTriangle : MyPoint
     {
         private MyPoint A, B, C;
-        public bool IsDrawable { get; set; }
+        private bool axisVisibility;
+
+        #region ON/OFF
+        public void Show()
+        {
+            axisVisibility = true;
+        }
 
         public void Hide()
         {
-            IsDrawable = false;
-        }
-
-        public void Show()
-        {
-            IsDrawable = true;
+            axisVisibility = false;
         }
 
         public void ToggleVisibility()
         {
-            if (IsDrawable == true)
-            {
-                Hide();
-            }
-            else
-            {
-                Show();
-            }
+            axisVisibility = !axisVisibility;
         }
+        #endregion
 
         public void ManualTriangle()
         {
-            IsDrawable = true;
+            axisVisibility = true;
 
             A = new MyPoint(5, 2, 0, Color.DeepPink);
             B = new MyPoint(8, 8, 0, Color.DeepPink);
@@ -42,11 +37,12 @@ namespace CotofrecMaria3131B
 
         public MyTriangle()
         {
+
         }
 
         public MyTriangle(MyPoint a, MyPoint b, MyPoint c)
         {
-            IsDrawable = true;
+            axisVisibility = true;
 
             A = new MyPoint(a.getX(), a.getY(), a.getZ(), a.getColor());
             B = new MyPoint(b.getX(), b.getY(), b.getZ(), b.getColor());
@@ -55,7 +51,7 @@ namespace CotofrecMaria3131B
 
         public void DrawMe()
         {
-            if (IsDrawable == false)
+            if (axisVisibility == false)
             {
                 return;
             }
@@ -74,6 +70,11 @@ namespace CotofrecMaria3131B
 
         public void DrawMe(int red, int green, int blue)
         {
+            if (axisVisibility == false)
+            {
+                return;
+            }
+
             GL.Begin(PrimitiveType.Triangles);
 
             GL.Color3(Color.FromArgb(red, 0, 0));
@@ -86,7 +87,7 @@ namespace CotofrecMaria3131B
             GL.End();
         }
 
-        public static MyTriangle ReadCoordonates(string FileName)
+        public static MyTriangle ReadCoordonatesTriangle(string FileName)
         {
             string[] lines = File.ReadAllLines(FileName);
             string[] result;
@@ -94,6 +95,7 @@ namespace CotofrecMaria3131B
             MyPoint[] vertex = new MyPoint[3];
 
             int j = 0;
+
             foreach (string line in lines)
             {
                 int i = 0;

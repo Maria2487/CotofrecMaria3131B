@@ -51,10 +51,13 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="MyAxis.cs" />
+    <Compile Include="MyCube.cs" />
     <Compile Include="MyPoint.cs" />
     <Compile Include="MyTriangle.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Randomizer.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
@@ -62,7 +65,8 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="triangle.txt" />
+    <Content Include="CubeCoord.txt" />
+    <Content Include="TriangleCoord.txt" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

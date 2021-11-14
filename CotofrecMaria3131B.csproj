@@ -51,7 +51,9 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="MassiveObject.cs" />
     <Compile Include="MyAxis.cs" />
+    <Compile Include="MyCamera.cs" />
     <Compile Include="MyCube.cs" />
     <Compile Include="MyPoint.cs" />
     <Compile Include="MyTriangle.cs" />
@@ -61,6 +63,7 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
+    <None Include="assets\lowpolytree.obj" />
     <None Include="OpenTK.dll.config" />
     <None Include="packages.config" />
   </ItemGroup>
@@ -68,5 +71,6 @@
     <Content Include="CubeCoord.txt" />
     <Content Include="TriangleCoord.txt" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

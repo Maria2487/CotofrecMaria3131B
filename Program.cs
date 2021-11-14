@@ -33,13 +33,22 @@ namespace CotofrecMaria3131B
         ///private readonly Color DEFAULT_BKG_COLOR = Color.FromArgb(49, 50, 51);
 
 
+        private readonly MyCamera cam;
+
+        MyCube cubAnim;
+        bool objGoUp = false;
+
+        MassiveObject massive;
         ///
-        
+
+
         public SimpleWindow3D() : base(800, 600, new GraphicsMode(32, 24, 0, 8))
         {
             VSync = VSyncMode.On;
             KeyDown += Keyboard_KeyDown;
             SeePort[0] = SeePort[1] = SeePort[2] = 10;
+
+            cam = new MyCamera();
 
             randomColor = new Randomizer();
             colorsCube = new Color[6];
@@ -47,6 +56,12 @@ namespace CotofrecMaria3131B
             {
                 colorsCube[i] = randomColor.RandomColor();
             }
+
+            cubAnim = new MyCube(cubeFileName);
+            cubAnim.TranslateCube(new MyPoint(0, 20, 0));
+
+            massive = new MassiveObject(Color.Purple);
+           
         }
 
         private void MyHelp()
@@ -108,9 +123,12 @@ namespace CotofrecMaria3131B
 
             double aspect_ratio = Width / (double)Height;
 
-            Matrix4 perspective = Matrix4.CreatePerspectiveFieldOfView(MathHelper.PiOver4, (float)aspect_ratio, 1, 64);
+            Matrix4 perspectiva = Matrix4.CreatePerspectiveFieldOfView(MathHelper.PiOver4, (float)this.Width / (float)this.Height, 1, 1024);
             GL.MatrixMode(MatrixMode.Projection);
-            GL.LoadMatrix(ref perspective);
+            GL.LoadMatrix(ref perspectiva);
+
+            // set the eye
+            cam.SetCamera();
         }
 
         protected override void OnUpdateFrame(FrameEventArgs e)
@@ -286,6 +304,54 @@ namespace CotofrecMaria3131B
             }
             #endregion
 
+
+            #region Unghi Camera Lab5.2
+
+            if (keyboard[Key.W])
+            {
+                cam.MoveForward();
+            }
+            if (keyboard[Key.S])
+            {
+                cam.MoveBackward();
+            }
+            if (keyboard[Key.A])
+            {
+                cam.MoveLeft();
+            }
+            if (keyboard[Key.D])
+            {
+                cam.MoveRight();
+            }
+            if (keyboard[Key.Q])
+            {
+                cam.MoveUp();
+            }
+            if (keyboard[Key.E])
+            {
+                cam.MoveDown();
+            }
+
+            if (keyboard[Key.KeypadMinus] && !keyboard.Equals(lastKeyPress))
+            {
+                cam.ResetCloseCamera();
+            }
+            if (keyboard[Key.KeypadPlus] && !keyboard.Equals(lastKeyPress))
+            {
+                cam.ResetFarCamera();
+            }
+            #endregion
+
+            if (keyboard[OpenTK.Input.Key.O] && !keyboard.Equals(lastKeyPress)) ////obiect masiv lab5
+            {
+                massive.ToggleVisibility();
+            }
+
+            if(mouse[MouseButton.Left]) ////Animatie obiect lab5
+            {
+                objGoUp = true;
+            }
+
             lastKeyPress = keyboard;
 
         }
@@ -297,18 +363,29 @@ namespace CotofrecMaria3131B
             GL.Clear(ClearBufferMask.ColorBufferBit | ClearBufferMask.DepthBufferBit);
 
             //Matrix4 lookat = Matrix4.LookAt(6, 6, 10, 0, 0, 0, 0, 1, 0);
-            Matrix4 lookat = Matrix4.LookAt(SeePort[0], SeePort[1], SeePort[2], 0, 0, 0, 0, 1, 0);
-            GL.MatrixMode(MatrixMode.Modelview);
-            GL.LoadMatrix(ref lookat);
+            //Matrix4 lookat = Matrix4.LookAt(SeePort[0], SeePort[1], SeePort[2], 0, 0, 0, 0, 1, 0);
+            //GL.MatrixMode(MatrixMode.Modelview);
+            //GL.LoadMatrix(ref lookat);
 
             MyAxis.DrawAxis();
 
             MyTriangle trg1 = MyTriangle.ReadCoordonatesTriangle(triangleFileName); //////////// Triunghi
             trg1.DrawMe();
 
+            cubAnim.DrawMe();
 
-            MyCube cube = new MyCube(cubeFileName); ///////////// Cub
-            cube.DrawMe(colorsCube);
+            
+            if(objGoUp == true && cubAnim.getY0() >= 0.0)         //////Animatie obiect lab5
+            {
+                cubAnim.TranslateCube(new MyPoint(0, -0.3f, 0));
+                
+            }
+            cubAnim.DrawMe();
+
+            massive.Draw();
+
+            //MyCube cube = new MyCube(cubeFileName); ///////////// Cub
+            //cube.DrawMe(colorsCube);
 
             #region Rotire obiect Laborator 2
 
@@ -330,52 +407,10 @@ namespace CotofrecMaria3131B
                 //DrawCube();
             }
 
+            
+
             SwapBuffers();
             //Thread.Sleep(1);
-        }
-
-        private void DrawCube()////////////////////// Cub
-        {
-            GL.Begin(PrimitiveType.Quads);
-
-            GL.Color3(Color.DarkViolet);
-            GL.Vertex3(-1.0f, -1.0f, -1.0f);
-            GL.Vertex3(-1.0f, 1.0f, -1.0f);
-            GL.Vertex3(1.0f, 1.0f, -1.0f);
-            GL.Vertex3(1.0f, -1.0f, -1.0f);
-
-            GL.Color3(Color.DarkSeaGreen);
-            GL.Vertex3(-1.0f, -1.0f, -1.0f);
-            GL.Vertex3(1.0f, -1.0f, -1.0f);
-            GL.Vertex3(1.0f, -1.0f, 1.0f);
-            GL.Vertex3(-1.0f, -1.0f, 1.0f);
-
-            GL.Color3(Color.DarkRed);
-
-            GL.Vertex3(-1.0f, -1.0f, -1.0f);
-            GL.Vertex3(-1.0f, -1.0f, 1.0f);
-            GL.Vertex3(-1.0f, 1.0f, 1.0f);
-            GL.Vertex3(-1.0f, 1.0f, -1.0f);
-
-            GL.Color3(Color.DarkTurquoise);
-            GL.Vertex3(-1.0f, -1.0f, 1.0f);
-            GL.Vertex3(1.0f, -1.0f, 1.0f);
-            GL.Vertex3(1.0f, 1.0f, 1.0f);
-            GL.Vertex3(-1.0f, 1.0f, 1.0f);
-
-            GL.Color3(Color.Magenta);
-            GL.Vertex3(-1.0f, 1.0f, -1.0f);
-            GL.Vertex3(-1.0f, 1.0f, 1.0f);
-            GL.Vertex3(1.0f, 1.0f, 1.0f);
-            GL.Vertex3(1.0f, 1.0f, -1.0f);
-
-            GL.Color3(Color.ForestGreen);
-            GL.Vertex3(1.0f, -1.0f, -1.0f);
-            GL.Vertex3(1.0f, 1.0f, -1.0f);
-            GL.Vertex3(1.0f, 1.0f, 1.0f);
-            GL.Vertex3(1.0f, -1.0f, 1.0f);
-
-            GL.End();
         }
 
         private static void Main(string[] args)

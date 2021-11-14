@@ -4,9 +4,9 @@ namespace CotofrecMaria3131B
 {
     internal class MyPoint
     {
-        private int X;
-        private int Y;
-        private int Z;
+        private float X;
+        private float Y;
+        private float Z;
         private Color pointColor = Color.Black;
 
         #region Constructori
@@ -15,14 +15,14 @@ namespace CotofrecMaria3131B
         {
         }
 
-        public MyPoint(int x, int y, int z)
+        public MyPoint(float x, float y, float z)
         {
             X = x;
             Y = y;
             Z = z;
         }
 
-        public MyPoint(int x, int y, int z, Color color)
+        public MyPoint(float x, float y, float z, Color color)
         {
             X = x;
             Y = y;
@@ -39,17 +39,17 @@ namespace CotofrecMaria3131B
             pointColor = color;
         }
 
-        public void setX(int x)
+        public void setX(float x)
         {
             X = x;
         }
 
-        public void setY(int y)
+        public void setY(float y)
         {
             Y = y;
         }
 
-        public void setZ(int z)
+        public void setZ(float z)
         {
             Z = z;
         }
@@ -63,17 +63,17 @@ namespace CotofrecMaria3131B
             return pointColor;
         }
 
-        public int getX()
+        public float getX()
         {
             return X;
         }
 
-        public int getY()
+        public float getY()
         {
             return Y;
         }
 
-        public int getZ()
+        public float getZ()
         {
             return Z;
         }

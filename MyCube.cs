@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using System.Drawing;
 using System.IO;
 using OpenTK.Graphics.OpenGL;
+using OpenTK;
 
 namespace CotofrecMaria3131B
 {
@@ -49,6 +50,26 @@ namespace CotofrecMaria3131B
             axisVisibility = !axisVisibility;
         }
         #endregion
+
+
+
+
+        public void TranslateCube(MyPoint  number)
+        {
+            int j = 0, x, y, z;
+            //GL.Begin(PrimitiveType.Quads);
+            for (int i = 0; i < cube.Length; i++)
+            {
+                cube[i].setX(cube[i].getX()+ number.getX());
+                cube[i].setY(cube[i].getY() + number.getY());
+                cube[i].setZ(cube[i].getZ() + number.getZ());
+
+                //GL.Vertex3(x, y, z);
+            }
+            //GL.End();
+        }
+
+
 
         public void DrawMe()
         {
@@ -130,5 +151,13 @@ namespace CotofrecMaria3131B
             }
             return null;
         }
+
+
+        public float getY0()
+        {
+            return cube[0].getY();
+        }
+
+
     }
 }
